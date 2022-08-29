@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:args/command_runner.dart';
+import 'package:dcm/dart_cli_installed_model.dart';
 import 'package:process_run/shell.dart';
 
 abstract class BaseCommand extends Command {
@@ -40,5 +42,32 @@ abstract class BaseCommand extends Command {
     if (!await directory.exists()) {
       await directory.create();
     }
+  }
+
+  Future<List<DartCliInstalledModel>> readConfig() async {
+    final file = File(dcmPath + Platform.pathSeparator + "config.json");
+    if (!await file.exists()) {
+      return [];
+    }
+    final configJsonText = await file.readAsString();
+    final configJson = jsonDecode(configJsonText);
+    if (configJson is! List) {
+      return [];
+    }
+    return configJson
+        .takeWhile((e) => e is Map<String, dynamic>)
+        .map((e) => DartCliInstalledModel().fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> saveConfig(List<DartCliInstalledModel> configs) async {
+    final file = File(dcmPath + Platform.pathSeparator + "config.json");
+    final configJson = configs.map((e) {
+      return DartCliInstalledModel().toJson(e);
+    }).toList();
+    final configJsonText = const JsonEncoder.withIndent(" ").convert(
+      configJson,
+    );
+    await file.writeAsString(configJsonText);
   }
 }

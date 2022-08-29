@@ -1,9 +1,51 @@
-import 'package:args/command_runner.dart';
+import 'dart:io';
+import 'package:dcm/base_command.dart';
+import 'package:darty_json_safe/darty_json.dart';
+import 'package:process_run/shell.dart';
 
-class RunCommand extends Command {
+class RunCommand extends BaseCommand {
   @override
   String get description => "run a dart command";
 
   @override
   String get name => "run";
+
+  RunCommand() {
+    argParser.addOption(
+      'name',
+      mandatory: true,
+      help: "请输入命令名字@版本 比如 dart_cli_manager@main",
+      abbr: 'n',
+    );
+  }
+
+  @override
+  Future<void> run() async {
+    await super.run();
+    final name = Unwrap(argResults?['name'] as String?).defaultValue('');
+    final nameArguments = name.split("@");
+    if (nameArguments.length != 2) {
+      throw "$name 参数不正确，中间需要@分割!";
+    }
+    final commandName = nameArguments[0];
+    final ref = nameArguments[1];
+    final exePath = binPath +
+        Platform.pathSeparator +
+        commandName +
+        Platform.pathSeparator +
+        ref +
+        Platform.pathSeparator +
+        commandName +
+        ".exe";
+    final exeFile = File(exePath);
+    if (!await exeFile.exists()) {
+      throw "$name 命令不存在请先进行安装!";
+    }
+    final argumentPath = argResults?.arguments.sublist(2).join(" ");
+    await Shell().run(
+      """
+  $exePath ${argumentPath ?? ''}
+""",
+    );
+  }
 }

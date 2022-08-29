@@ -1,8 +1,10 @@
 import 'dart:io';
 
-import 'package:dart_cli_manager/base_command.dart';
+import 'package:dcm/base_command.dart';
+import 'package:dcm/dart_cli_installed_model.dart';
 import 'package:darty_json_safe/darty_json.dart';
 import 'package:process_run/shell.dart';
+import 'package:pubspec_parse/pubspec_parse.dart';
 
 class InstallCommand extends BaseCommand {
   @override
@@ -16,7 +18,9 @@ class InstallCommand extends BaseCommand {
       "path",
       mandatory: true,
       help: "地址加上版本号(分支，或者某个提交点) 比如 http(s)://xxxx/xxx/dart_cli_manager@main",
+      abbr: 'p',
     );
+    argParser.addFlag('foce', help: "是否覆盖", abbr: 'f');
   }
 
   @override
@@ -26,6 +30,9 @@ class InstallCommand extends BaseCommand {
     /// 获取 path 参数
     final path = argResults?['path'] as String? ?? '';
 
+    /// 是否覆盖
+    final foce = argResults?['foce'] as bool? ?? false;
+
     /// 通过 [@] 分割字符串
     final pathArguments = path.split('@');
 
@@ -34,11 +41,26 @@ class InstallCommand extends BaseCommand {
       throw '$path 格式不正确!';
     }
 
+    final url = pathArguments[0];
+
     /// 将第一个参数解析成 Uri
-    final uri = Uri.parse(pathArguments[0]);
+    final uri = Uri.parse(url);
 
     /// 获取第二个参数对应的引用
     final ref = pathArguments[1];
+
+    /// 读取目前已经安装的配置
+    final configs = await readConfig();
+
+    /// 判断安装的命令是否已经存在
+    final cliExists = configs.any((element) {
+      return element.url == url && ref == ref;
+    });
+
+    /// 如果存在 并且不是覆盖则提示已经安装
+    if (cliExists && !foce) {
+      throw "$path 已经安装! 请添加 --f 参数进行覆盖安装!";
+    }
 
     /// 获取当前命令的目录名称
     final packageName = this.packageName(uri);
@@ -71,8 +93,8 @@ class InstallCommand extends BaseCommand {
 ''',
     );
     final refExit = branchResults.any((e) {
-      return JSON(e)
-          .stringValue
+      return Unwrap(e.stdout as String?)
+          .defaultValue('')
           .split("\n")
           .any((element) => element.contains(ref));
     });
@@ -84,63 +106,66 @@ class InstallCommand extends BaseCommand {
       );
     }
 
+    final pubspecFile = File(refPath + Platform.pathSeparator + "pubspec.yaml");
+    if (!await pubspecFile.exists()) {
+      throw "${pubspecFile.path} 不存在";
+    }
+    final pubspecContent = await pubspecFile.readAsString();
+
+    /// 读取 Pub 的名称
+    final pubName = Pubspec.parse(pubspecContent).name;
+
     final binPath = refDirectory.path + Platform.pathSeparator + 'bin';
     if (!await Directory(binPath).exists()) {
       throw "$binPath 不存在";
     }
-    final mainFile = await findMainFile(binPath);
+    final mainFile = File(binPath + Platform.pathSeparator + "$pubName.dart");
 
-    if (mainFile == null) {
-      throw "$binPath 不存在 .dart 可执行文件!";
+    if (!await mainFile.exists()) {
+      throw "${mainFile.path} 不存在";
     }
 
     /// 编译 exe 执行文件
     final dart = await which('dart');
-    await Shell().run(
+    await Shell(workingDirectory: refPath).run(
       '''
-  $dart compile exe $mainFile
+  $dart pub get
+  $dart compile exe ${mainFile.path}
 ''',
     );
 
-    final exeFile = await findExeFile(binPath);
-    if (exeFile == null) {
-      throw "$binPath 不存在可执行的 exe";
+    final exeFile = File(binPath + Platform.pathSeparator + "$pubName.exe");
+    if (!await exeFile.exists()) {
+      throw "${exeFile.path} 不存在";
     }
-    final exeNewPath = this.binPath +
-        Platform.pathSeparator +
-        exeFile.path.split(Platform.pathSeparator).last;
+
+    final copyToDirectory = Directory(
+      this.binPath +
+          Platform.pathSeparator +
+          pubName +
+          Platform.pathSeparator +
+          ref,
+    );
+
+    if (!await copyToDirectory.exists()) {
+      await copyToDirectory.create(recursive: true);
+    }
+
+    final exeNewPath =
+        copyToDirectory.path + Platform.pathSeparator + "$pubName.exe";
     await exeFile.copy(exeNewPath);
-  }
 
-  Future<File?> findMainFile(String path) async {
-    final list = Directory(path).listSync();
-    for (final element in list) {
-      if (element.path.split('.').last != 'dart') {
-        continue;
-      }
-      if (element is! File) {
-        continue;
-      }
-      final content = await element.readAsString();
-      if (!RegExp(r'main\([\w\W]+\s+\w+\)\s+\w*\s+{').hasMatch(content)) {
-        continue;
-      }
-      return element;
+    /// 如果当前的配置不存在 则保存配置
+    if (!cliExists) {
+      configs.add(
+        DartCliInstalledModel().fromJson({})
+          ..name = pubName
+          ..url = url
+          ..ref = ref,
+      );
+      await saveConfig(configs);
     }
-    return null;
-  }
 
-  Future<File?> findExeFile(String path) async {
-    final list = Directory(path).listSync();
-    for (final element in list) {
-      if (element.path.split('.').last != 'exe') {
-        continue;
-      }
-      if (element is! File) {
-        continue;
-      }
-      return element;
-    }
-    return null;
+    stdout.write("$pubName@$ref 安装成功!");
   }
 }
