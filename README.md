@@ -32,3 +32,7 @@ dcm list
 dcm uninstall -n dcm@main
 ```
 
+### 通过一个模版地址创建一个模板工程
+```bash
+dcm create -u [Git 仓库地址] -r [分支/版本/提交] -n [名称] [-d [描述]]
+```

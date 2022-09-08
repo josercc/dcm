@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:dcm/create_command.dart';
 import 'package:dcm/install_command.dart';
 import 'package:dcm/list_command.dart';
 import 'package:dcm/run_command.dart';
@@ -11,7 +12,8 @@ Future<void> main(List<String> args) async {
     ..addCommand(InstallCommand())
     ..addCommand(RunCommand())
     ..addCommand(UninstallCommand())
-    ..addCommand(ListCommand());
+    ..addCommand(ListCommand())
+    ..addCommand(CreateCommand());
   try {
     await runner.run(args);
   } catch (e) {
