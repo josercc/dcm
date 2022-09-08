@@ -17,12 +17,15 @@ class RunCommand extends BaseCommand {
       help: "请输入命令名字@版本 比如 dart_cli_manager@main",
       abbr: 'n',
     );
+
+    argParser.addOption('command', mandatory: true, help: "子命令", abbr: 'c');
   }
 
   @override
   Future<void> run() async {
     await super.run();
     final name = Unwrap(argResults?['name'] as String?).defaultValue('');
+    final command = Unwrap(argResults?['command'] as String?).defaultValue('');
     final nameArguments = name.split("@");
     if (nameArguments.length != 2) {
       throw "$name 参数不正确，中间需要@分割!";
@@ -41,10 +44,9 @@ class RunCommand extends BaseCommand {
     if (!await exeFile.exists()) {
       throw "$name 命令不存在请先进行安装!";
     }
-    final argumentPath = argResults?.arguments.sublist(2).join(" ");
     await Shell().run(
       """
-  $exePath ${argumentPath ?? ''}
+  $exePath $command
 """,
     );
   }

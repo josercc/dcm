@@ -14,8 +14,17 @@ Future<void> main(List<String> args) async {
     ..addCommand(UninstallCommand())
     ..addCommand(ListCommand())
     ..addCommand(CreateCommand());
+
+  var sourceArgs = args;
+  if (!sourceArgs.contains('-c') && !sourceArgs.contains('--command')) {
+    if (sourceArgs.length > 3) {
+      final subCommond = sourceArgs.sublist(3).join(" ");
+      sourceArgs = sourceArgs.sublist(0, 3);
+      sourceArgs.addAll(['-c', subCommond]);
+    }
+  }
   try {
-    await runner.run(args);
+    await runner.run(sourceArgs);
   } catch (e) {
     // ignore: avoid_print
     print(e.toString());
