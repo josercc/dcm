@@ -16,7 +16,9 @@ Future<void> main(List<String> args) async {
     ..addCommand(CreateCommand());
 
   var sourceArgs = args;
-  if (!sourceArgs.contains('-c') && !sourceArgs.contains('--command')) {
+  if (!sourceArgs.contains('-c') &&
+      !sourceArgs.contains('--command') &&
+      sourceArgs.first == 'run') {
     if (sourceArgs.length > 3) {
       final subCommond = sourceArgs.sublist(3).join(" ");
       sourceArgs = sourceArgs.sublist(0, 3);
