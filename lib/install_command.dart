@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dcm/base_command.dart';
 import 'package:dcm/dart_cli_installed_model.dart';
 import 'package:darty_json_safe/darty_json.dart';
