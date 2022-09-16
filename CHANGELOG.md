@@ -1,3 +1,3 @@
 ## 1.0.0
 
-- Initial version.
+- 看README 使用说明.
