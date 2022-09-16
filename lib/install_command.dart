@@ -51,16 +51,6 @@ class InstallCommand extends BaseCommand {
     /// 读取目前已经安装的配置
     final configs = await readConfig();
 
-    /// 判断安装的命令是否已经存在
-    final cliExists = configs.any((element) {
-      return element.name == name && ref == ref;
-    });
-
-    /// 如果存在 并且不是覆盖则提示已经安装
-    if (cliExists && !foce) {
-      throw "$path 已经安装! 请添加 --f 参数进行覆盖安装!";
-    }
-
     /// 获取当前命令的目录名称
     final packageName = this.packageName(uri);
 
@@ -113,6 +103,16 @@ class InstallCommand extends BaseCommand {
 
     /// 读取 Pub 的名称
     final pubName = Pubspec.parse(pubspecContent).name;
+
+    /// 判断安装的命令是否已经存在
+    final cliExists = configs.any((element) {
+      return element.name == pubName && ref == ref;
+    });
+
+    /// 如果存在 并且不是覆盖则提示已经安装
+    if (cliExists && !foce) {
+      throw "$path 已经安装! 请添加 --f 参数进行覆盖安装!";
+    }
 
     final binPath = refDirectory.path + Platform.pathSeparator + 'bin';
     if (!await Directory(binPath).exists()) {
