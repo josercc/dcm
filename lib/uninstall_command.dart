@@ -54,6 +54,6 @@ class UninstallCommand extends BaseCommand {
     }
     configs.removeAt(index);
     await saveConfig(configs);
-    stdout.write("$name 卸载成功!");
+    stdout.writeln("$name 卸载成功!");
   }
 }

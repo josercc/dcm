@@ -53,7 +53,7 @@ class InstallCommand extends BaseCommand {
 
     /// 判断安装的命令是否已经存在
     final cliExists = configs.any((element) {
-      return element.url == url && ref == ref;
+      return element.name == name && ref == ref;
     });
 
     /// 如果存在 并且不是覆盖则提示已经安装
@@ -165,6 +165,6 @@ class InstallCommand extends BaseCommand {
       await saveConfig(configs);
     }
 
-    stdout.write("$pubName@$ref 安装成功!");
+    stdout.writeln("$pubName@$ref 安装成功");
   }
 }
