@@ -31,12 +31,6 @@ Future<void> main(List<String> args) async {
   try {
     await runner.run(sourceArgs);
   } catch (e) {
-    // ignore: avoid_print
-    print(e.toString());
-    if (e is String) {
-      stdout.writeln(e);
-    } else if (e is UsageException) {
-      stdout.writeln(e.toString());
-    }
+    stdout.writeln(e.toString());
   }
 }

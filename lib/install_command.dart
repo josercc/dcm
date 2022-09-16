@@ -51,6 +51,13 @@ class InstallCommand extends BaseCommand {
     /// 读取目前已经安装的配置
     final configs = await readConfig();
 
+    final urlInstalled = configs.any((element) {
+      return element.url == url && element.ref == ref;
+    });
+    if (urlInstalled && !foce) {
+      throw "$url@$ref 已经安装! 请添加 --f 参数进行覆盖安装!";
+    }
+
     /// 获取当前命令的目录名称
     final packageName = this.packageName(uri);
 
@@ -111,7 +118,7 @@ class InstallCommand extends BaseCommand {
 
     /// 如果存在 并且不是覆盖则提示已经安装
     if (cliExists && !foce) {
-      throw "$path 已经安装! 请添加 --f 参数进行覆盖安装!";
+      throw "$pubName@$ref 已经安装! 请添加 --f 参数进行覆盖安装!";
     }
 
     final binPath = refDirectory.path + Platform.pathSeparator + 'bin';
