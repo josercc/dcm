@@ -14,6 +14,7 @@ dependencies:
   darty_json_safe: ^0.2.0
   json_annotation: ^4.6.0
   mustache_template: ^2.0.0
+  path: ^1.8.2
   process_run: ^0.12.3+2
   pubspec_parse: ^1.2.1
   yaml: ^3.1.1
