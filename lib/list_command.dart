@@ -22,7 +22,7 @@ class ListCommand extends BaseCommand {
     - ${config.ref} *
 """,
       );
-      stdout.write(listTextBuffer.toString());
     }
+    stdout.write(listTextBuffer.toString());
   }
 }
