@@ -161,16 +161,18 @@ class InstallCommand extends BaseCommand {
         copyToDirectory.path + Platform.pathSeparator + "$pubName.exe";
     await exeFile.copy(exeNewPath);
 
-    /// 如果当前的配置不存在 则保存配置
-    if (!cliExists) {
-      configs.add(
-        DartCliInstalledModel().fromJson({})
-          ..name = pubName
-          ..url = url
-          ..ref = ref,
-      );
-      await saveConfig(configs);
+    /// 如果当前的配置存在 则删除之前的配置 重新添加
+    if (cliExists) {
+      configs.removeWhere((element) => element.name == pubName);
     }
+
+    configs.add(
+      DartCliInstalledModel().fromJson({})
+        ..name = pubName
+        ..url = url
+        ..ref = ref,
+    );
+    await saveConfig(configs);
 
     stdout.writeln("$pubName@$ref 安装成功");
   }
