@@ -1,0 +1,54 @@
+[
+ {
+  "imports": [
+   "package:json_annotation/json_annotation.dart",
+   "package:darty_json_safe/darty_json_safe.dart"
+  ],
+  "converters": [
+   {
+    "className": "DartCliInstalledModel",
+    "fields": [
+     {
+      "isLate": true,
+      "isOptional": false,
+      "fieldType": "String",
+      "fieldName": "url",
+      "defaultValue": "",
+      "comments": [
+       "依赖的地址"
+      ],
+      "converterName": "url",
+      "import": ""
+     },
+     {
+      "isLate": true,
+      "isOptional": false,
+      "fieldType": "String",
+      "fieldName": "ref",
+      "defaultValue": "",
+      "comments": [
+       "依赖的节点"
+      ],
+      "converterName": "ref",
+      "import": ""
+     },
+     {
+      "isLate": true,
+      "isOptional": false,
+      "fieldType": "String",
+      "fieldName": "name",
+      "defaultValue": "",
+      "comments": [
+       "命令行的名称"
+      ],
+      "converterName": "name",
+      "import": ""
+     }
+    ],
+    "isRoot": true,
+    "explicitToJson": true
+   }
+  ],
+  "filePath": "/Volumes/Macintosh HD/Users/king/Documents/dcm/lib/dart_cli_installed_model.dart"
+ }
+]

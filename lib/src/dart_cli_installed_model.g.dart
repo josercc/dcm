@@ -1,24 +1,24 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
+/// 自动生成代码 请勿修改!
+/// 自动生成代码 请勿修改!
+/// 自动生成代码 请勿修改!
 
 part of 'dart_cli_installed_model.dart';
 
 // **************************************************************************
-// JsonSerializableGenerator
+// Create Winner App 低代码平台
 // **************************************************************************
 
 DartCliInstalledModel _$DartCliInstalledModelFromJson(
-  Map<String, dynamic> json,
-) {
+    Map<String, dynamic> json) {
   return DartCliInstalledModel()
-    ..url = JSON(json)["url"].stringValue
-    ..ref = JSON(json)["ref"].stringValue
-    ..name = JSON(json)["name"].stringValue;
+    ..url = JSON(json)["url"].string ?? ''
+    ..ref = JSON(json)["ref"].string ?? ''
+    ..name = JSON(json)["name"].string ?? '';
 }
 
 Map<String, dynamic> _$DartCliInstalledModelToJson(
-  DartCliInstalledModel instance,
-) {
-  return <String, dynamic>{
+    DartCliInstalledModel instance) {
+  return {
     'url': instance.url,
     'ref': instance.ref,
     'name': instance.name,

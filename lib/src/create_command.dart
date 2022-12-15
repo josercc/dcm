@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:darty_json_safe/darty_json.dart';
-import 'package:dcm/base_command.dart';
-import 'package:dcm/generated_command.dart';
+import 'package:darty_json_safe/darty_json_safe.dart';
+import 'package:dcm/src/base_command.dart';
+import 'package:dcm/src/generated_command.dart';
 import 'package:mustache_template/mustache_template.dart';
 import 'package:process_run/shell.dart';
 

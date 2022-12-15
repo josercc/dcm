@@ -1,7 +1,8 @@
 import 'dart:io';
 
-import 'package:dcm/base_command.dart';
-import 'package:darty_json_safe/darty_json.dart';
+import 'package:dcm/src/base_command.dart';
+import 'package:darty_json_safe/darty_json_safe.dart';
+import 'package:dcm/src/cli_version_manager.dart';
 
 class UninstallCommand extends BaseCommand {
   @override
@@ -45,15 +46,11 @@ class UninstallCommand extends BaseCommand {
       await exeFile.delete();
     }
 
-    final configs = await readConfig();
-    final index = configs.indexWhere(
-      (element) => element.name == commandName && element.ref == ref,
-    );
-    if (index == -1) {
+    final cli = CliVersionManager().queryFromName(commandName, ref);
+    if (cli == null) {
       return;
     }
-    configs.removeAt(index);
-    await saveConfig(configs);
+    CliVersionManager().runner.delete(cli);
     stdout.writeln("$name 卸载成功!");
   }
 }

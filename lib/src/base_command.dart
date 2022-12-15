@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:dcm/dart_cli_installed_model.dart';
+import 'package:dcm/src/dart_cli_installed_model.dart';
 import 'package:process_run/shell.dart';
 
 abstract class BaseCommand extends Command {

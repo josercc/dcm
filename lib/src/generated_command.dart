@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dcm/base_command.dart';
+import 'package:dcm/src/base_command.dart';
 import 'package:mustache_template/mustache.dart';
 import 'package:yaml/yaml.dart';
 

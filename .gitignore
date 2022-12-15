@@ -4,3 +4,8 @@
 
 # Conventional directory for build output.
 build/
+bin/default.realm.management
+bin/dcm.exe
+bin/default.realm
+bin/default.realm.lock
+binary

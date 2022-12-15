@@ -15,6 +15,12 @@ dart pub global activate --source git https://github.com/josercc/dcm.git
 dcm install -p https://github.com/josercc/dcm.git@main
 ```
 
+### 通过一个本地项目安装（不需要.git）
+
+```bash
+dcm local -p xxxxx/dcm 
+```
+
 ### 运行一个命令
 
 ```bash
@@ -35,4 +41,9 @@ dcm uninstall -n dcm@main
 ### 通过一个模版地址创建一个模板工程
 ```bash
 dcm create -u [Git 仓库地址] -r [分支/版本/提交] -n [名称] [-d [描述]]
+```
+
+### 查看本地数据路径
+```bash
+dcm print_db_path
 ```

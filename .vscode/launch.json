@@ -1,0 +1,51 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dart_cli_manager",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "create",
+                "-n",
+                "dct",
+                "-u",
+                "/Users/king/Documents/flutter_application_template"
+            ],
+            "program": "bin/dcm.dart",
+        },
+        {
+            "name": "install command",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/dcm.dart",
+            "args": [
+                "install",
+                "-p",
+                "http://192.168.206.220/flutter-app/winner_model_parse.git@main",
+                "-f",
+            ]
+        },
+        {
+            "name": "list command",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/dcm.dart",
+            "args": [
+                "list",
+            ]
+        },
+        {
+            "name": "uninstall command",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/dcm.dart",
+            "args": [
+                "uninstall","-n","realm_generate@main"
+            ]
+        }
+    ]
+}

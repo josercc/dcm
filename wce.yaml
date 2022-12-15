@@ -1,0 +1,6 @@
+winner_model_parse:
+  parse:
+    parameters:
+      files:
+        match_path:
+          - /lib/**.[dart]

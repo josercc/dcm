@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:dcm/base_command.dart';
-import 'package:darty_json_safe/darty_json.dart';
+import 'package:dcm/src/base_command.dart';
+import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:process_run/shell.dart';
 
 class RunCommand extends BaseCommand {
