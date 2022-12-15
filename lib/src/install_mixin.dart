@@ -143,7 +143,8 @@ mixin InstallMixin on BaseCommand {
               ..name = pubName
               ..url = path
               ..ref = ref
-              ..isLocal = isLocalPath(path),
+              ..isLocal = isLocalPath(path)
+              ..date = DateTime.now(),
           );
     }
 
