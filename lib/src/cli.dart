@@ -20,4 +20,7 @@ class _Cli {
 
   /// 是否本地路径安装
   bool isLocal = false;
+
+  /// 安装时间
+  DateTime? date;
 }

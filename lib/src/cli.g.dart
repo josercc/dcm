@@ -15,6 +15,7 @@ class Cli extends _Cli with RealmEntity, RealmObjectBase, RealmObject {
     String ref = '',
     String name = '',
     bool isLocal = false,
+    DateTime? date,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObjectBase.setDefaults<Cli>({
@@ -29,6 +30,7 @@ class Cli extends _Cli with RealmEntity, RealmObjectBase, RealmObject {
     RealmObjectBase.set(this, 'ref', ref);
     RealmObjectBase.set(this, 'name', name);
     RealmObjectBase.set(this, 'isLocal', isLocal);
+    RealmObjectBase.set(this, 'date', date);
   }
 
   Cli._();
@@ -59,6 +61,12 @@ class Cli extends _Cli with RealmEntity, RealmObjectBase, RealmObject {
   set isLocal(bool value) => RealmObjectBase.set(this, 'isLocal', value);
 
   @override
+  DateTime? get date =>
+      RealmObjectBase.get<DateTime>(this, 'date') as DateTime?;
+  @override
+  set date(DateTime? value) => RealmObjectBase.set(this, 'date', value);
+
+  @override
   Stream<RealmObjectChanges<Cli>> get changes =>
       RealmObjectBase.getChanges<Cli>(this);
 
@@ -75,6 +83,7 @@ class Cli extends _Cli with RealmEntity, RealmObjectBase, RealmObject {
       SchemaProperty('ref', RealmPropertyType.string),
       SchemaProperty('name', RealmPropertyType.string),
       SchemaProperty('isLocal', RealmPropertyType.bool),
+      SchemaProperty('date', RealmPropertyType.timestamp, optional: true),
     ]);
   }
 }

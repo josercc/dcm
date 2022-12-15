@@ -37,6 +37,18 @@ class CliVersionManager {
     if (await File(configPath).exists()) {
       await File(configPath).delete();
     }
+
+    final allCli = runner.all<Cli>();
+    for (final cli in allCli) {
+      if (cli.date == null) {
+        runner.update<Cli>(
+          object: cli,
+          editCallBack: (editObject) {
+            editObject.date = DateTime.now();
+          },
+        );
+      }
+    }
   }
 
   bool isExitCli(String url, String ref) {
