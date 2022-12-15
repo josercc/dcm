@@ -1,7 +1,7 @@
 name: dcm
-version: 1.1.1
+version: 1.2.0
 homepage: https://github.com/josercc/dcm
-publish_to: none
+# publish_to: none
 description: Dart CLI manager
 environment: 
   sdk: '>=2.17.0 <3.0.0'

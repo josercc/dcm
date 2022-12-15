@@ -11,7 +11,7 @@ class CliVersionManager {
   factory CliVersionManager() => _manager;
 
   final RealmRunner runner = RealmRunner(
-    Realm(Configuration.local([Cli.schema])),
+    Realm(Configuration.local([Cli.schema], path: realmPath)),
   );
 
   Future<void> migrationOldConfig() async {

@@ -61,3 +61,5 @@ Future<void> saveConfig(List<DartCliInstalledModel> configs) async {
 String get configPath => p.join(dcmPath, "config.json");
 
 bool isLocalPath(String url) => !url.startsWith('http');
+
+String get realmPath => p.join(dcmPath, 'dcm.realm');

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dcm/src/base_command.dart';
-import 'package:realm/realm.dart';
+import 'package:dcm/src/dcm.dart';
 
 class PrintDBPathCommand extends BaseCommand {
   @override
@@ -13,6 +13,6 @@ class PrintDBPathCommand extends BaseCommand {
   @override
   Future<void> run() async {
     super.run();
-    stdout.writeln(Configuration.defaultRealmPath);
+    stdout.writeln(realmPath);
   }
 }
