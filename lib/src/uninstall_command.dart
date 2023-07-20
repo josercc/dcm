@@ -46,11 +46,9 @@ class UninstallCommand extends BaseCommand {
       await exeFile.delete();
     }
 
-    final cli = CliVersionManager().queryFromName(commandName, ref);
-    if (cli == null) {
-      return;
-    }
-    CliVersionManager().runner.delete(cli);
+    final cli = await CliVersionManager().queryFromName(commandName, ref);
+    if (cli == null) return;
+    CliVersionManager().deleteCli(cli);
     stdout.writeln("$name 卸载成功!");
   }
 }

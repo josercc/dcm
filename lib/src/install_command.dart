@@ -42,7 +42,7 @@ class InstallCommand extends BaseCommand with InstallMixin {
     /// 获取第二个参数对应的引用
     final ref = pathArguments[1];
 
-    final urlInstalled = CliVersionManager().isExitCli(url, ref);
+    final urlInstalled = await CliVersionManager().isExitCli(url, ref);
     if (urlInstalled && !foce) {
       throw "$url@$ref 已经安装! 请添加 --f 参数进行覆盖安装!";
     }

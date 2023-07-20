@@ -12,9 +12,6 @@ import 'package:dcm/src/run_command.dart';
 import 'package:dcm/src/uninstall_command.dart';
 
 Future<void> main(List<String> args) async {
-  /// 迁移旧数据
-  await CliVersionManager().migrationOldConfig();
-
   final runner = CommandRunner("dcm", "Dart Cli Version Manager")
     ..addCommand(InstallCommand())
     ..addCommand(RunCommand())

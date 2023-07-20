@@ -9,7 +9,6 @@ import 'package:io/io.dart';
 import 'package:path/path.dart' as p;
 import 'package:process_run/shell_run.dart';
 import 'package:pubspec_parse/pubspec_parse.dart';
-import 'package:realm/realm.dart';
 
 mixin InstallMixin on BaseCommand {
   Future<void> install(String path, String ref, {bool foce = false}) async {
@@ -74,10 +73,7 @@ mixin InstallMixin on BaseCommand {
     /// 读取 Pub 的名称
     final pubName = Pubspec.parse(pubspecContent).name;
 
-    final cli = CliVersionManager().runner.queryOne<Cli>(
-      r'ref == $0 && name == $1',
-      [ref, pubName],
-    );
+    final cli = await CliVersionManager().queryFromName(pubName, ref);
 
     /// 判断安装的命令是否已经存在
     final cliExists = cli != null;
@@ -138,14 +134,14 @@ mixin InstallMixin on BaseCommand {
     await exeFile.copy(exeNewPath);
 
     if (cli == null) {
-      CliVersionManager().runner.add(
-            Cli(Uuid.v4())
-              ..name = pubName
-              ..url = path
-              ..ref = ref
-              ..isLocal = isLocalPath(path)
-              ..date = DateTime.now(),
-          );
+      CliVersionManager().addCli(
+        Cli()
+          ..name = pubName
+          ..url = path
+          ..ref = ref
+          ..isLocal = isLocalPath(path)
+          ..date = DateTime.now().millisecondsSinceEpoch,
+      );
     }
 
     stdout.writeln("$pubName@$ref 安装成功");

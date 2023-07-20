@@ -21,20 +21,11 @@ class ListCommand extends BaseCommand {
   @override
   Future<void> run() async {
     await super.run();
-    final allClis = CliVersionManager().runner.all<Cli>();
+    final allClis = await CliVersionManager().allInstalled();
     final json = JSON(argResults?['json']).boolValue;
     if (json) {
-      final jsonText =
-          const JsonEncoder.withIndent(" ").convert(allClis.map((e) {
-        return {
-          'id': e.id.toString(),
-          'url': e.url,
-          'ref': e.ref,
-          'name': e.name,
-          'isLocal': e.isLocal,
-          'date': e.date?.millisecondsSinceEpoch ?? 0,
-        };
-      }).toList());
+      final jsonText = const JsonEncoder.withIndent(" ")
+          .convert(allClis.map((e) => e.toJson()).toList());
       stdout.writeln(jsonText);
       return;
     }

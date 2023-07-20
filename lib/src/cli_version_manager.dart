@@ -1,61 +1,67 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/cli.dart';
-import 'package:dcm/src/dcm.dart';
-import 'package:realm/realm.dart';
-import 'package:realm_generate/realm_generate.dart';
+import 'package:path/path.dart';
+import 'package:process_run/shell_run.dart';
 
 class CliVersionManager {
   CliVersionManager._();
   static final CliVersionManager _manager = CliVersionManager._();
   factory CliVersionManager() => _manager;
 
-  final RealmRunner runner = RealmRunner(
-    Realm(Configuration.local([Cli.schema], path: realmPath, schemaVersion: 1)),
-  );
+  final List<Cli> _installed = [];
 
-  Future<void> migrationOldConfig() async {
-    final configs = await readConfig();
-    for (final config in configs) {
-      final results =
-          runner.query<Cli>(r'url == $0 && ref == $1 && name == $2', [
-        config.url,
-        config.ref,
-        config.name,
-      ]);
-      if (results.isNotEmpty) {
-        continue;
-      }
-      runner.add(
-        Cli(Uuid.v4())
-          ..name = config.name
-          ..ref = config.ref
-          ..url = config.url
-          ..isLocal = isLocalPath(config.url),
-      );
-    }
-    if (await File(configPath).exists()) {
-      await File(configPath).delete();
-    }
-
-    final allCli = runner.all<Cli>();
-    for (final cli in allCli) {
-      if (cli.date == null) {
-        runner.update<Cli>(
-          object: cli,
-          editCallBack: (editObject) {
-            editObject.date = DateTime.now();
-          },
-        );
-      }
-    }
+  Future<bool> isExitCli(String url, String ref) async {
+    await _loadInstalled();
+    return _installed
+        .any((element) => element.url == url && element.ref == ref);
   }
 
-  bool isExitCli(String url, String ref) {
-    return runner.query<Cli>(r'url == $0 && ref == $1', [url, ref]).isNotEmpty;
+  Future<Cli?> queryFromName(String name, String ref) async {
+    await _loadInstalled();
+    return JSON(_installed
+            .where((element) => element.name == name && element.ref == ref))[0]
+        .rawValue;
   }
 
-  Cli? queryFromName(String name, String ref) {
-    return runner.queryOne<Cli>(r'name == $0 && ref == $1', [name, ref]);
+  Future<List<Cli>> allInstalled() async {
+    await _loadInstalled();
+    return _installed;
+  }
+
+  Future<void> addCli(Cli cli) async {
+    _installed.add(cli);
+    await _saveInstalled();
+  }
+
+  Future<void> deleteCli(Cli cli) async {
+    final index = _installed.indexWhere(
+        (element) => element.url == cli.url && element.ref == cli.ref);
+    if (index != 0) {
+      _installed.removeAt(index);
+    }
+    await _saveInstalled();
+  }
+
+  Future<void> _loadInstalled() async {
+    if (_installPath.isNotEmpty) {
+      return;
+    }
+    final jsonText = await File(_installPath).readAsString();
+    final jsonValue = json.decode(jsonText);
+    _installed
+        .addAll(JSON(jsonValue).listValue.map((e) => Cli.fromJson(e)).toList());
+  }
+
+  Future<void> _saveInstalled() async {
+    final jsonValue = _installed.map((e) => e.toJson());
+    final jsonText = const JsonEncoder.withIndent(" ").convert(jsonValue);
+    await File(_installPath).writeAsString(jsonText);
+  }
+
+  String get _installPath {
+    return join(platformEnvironment['HOME']!, '.dcm', 'plugin.json');
   }
 }
