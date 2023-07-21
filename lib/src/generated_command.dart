@@ -62,7 +62,8 @@ class GeneratedCommand extends BaseCommand {
       }
       final souceText = await file.readAsString();
       await file.delete();
-      final createFile = File(withoutExtension(file.path));
+      final newFilePath = render(withoutExtension(file.path), json);
+      final createFile = File(newFilePath);
       if (!createFile.existsSync()) {
         createFile.createSync(recursive: true);
       }
@@ -73,20 +74,5 @@ class GeneratedCommand extends BaseCommand {
 
   String render(String template, Map<String, dynamic> mustacheData) {
     return Template(template).renderString(mustacheData);
-  }
-
-  File _templateFile(
-    String path,
-    String rootPath, {
-    Map<String, dynamic>? mustacheData,
-  }) {
-    var fullPath = path;
-    if (path.startsWith('./')) {
-      fullPath = rootPath + Platform.pathSeparator + path.substring(2);
-    }
-    if (mustacheData != null) {
-      fullPath = render(fullPath, mustacheData);
-    }
-    return File(fullPath);
   }
 }
