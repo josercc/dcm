@@ -58,7 +58,11 @@ class CliVersionManager {
   Future<void> _saveInstalled() async {
     final jsonValue = _installed.map((e) => e.toJson());
     final jsonText = const JsonEncoder.withIndent(" ").convert(jsonValue);
-    await File(_installPath).writeAsString(jsonText);
+    final file = File(_installPath);
+    if (!await file.exists()) {
+      await file.create(recursive: true);
+    }
+    await file.writeAsString(jsonText);
   }
 
   String get _installPath {
