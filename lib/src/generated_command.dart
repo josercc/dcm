@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dcm/src/base_command.dart';
 import 'package:mustache_template/mustache.dart';
+import 'package:path/path.dart';
 import 'package:yaml/yaml.dart';
 
 class GeneratedCommand extends BaseCommand {
@@ -53,36 +54,19 @@ class GeneratedCommand extends BaseCommand {
     required Map<String, dynamic> json,
     required String rootPath,
   }) async {
-    final mustacheTemplateYamlPath =
-        rootPath + Platform.pathSeparator + 'mustache_template.yaml';
-    final mustacheTemplateYamlFile = File(mustacheTemplateYamlPath);
-    if (!await mustacheTemplateYamlFile.exists()) {
-      throw '$mustacheTemplateYamlPath 不存在!';
-    }
-    final yamlSource = await mustacheTemplateYamlFile.readAsString();
-    final ymlMap = loadYaml(yamlSource);
-    if (ymlMap is! YamlMap) {
-      throw '$mustacheTemplateYamlPath 格式错误!';
-    }
-    final templatePaths = ymlMap['mustache_template_paths'];
-    if (templatePaths is! YamlList) {
-      throw '$mustacheTemplateYamlPath 不存在 mustache_template_paths 配置';
-    }
-    for (var i = 0; i < templatePaths.length; i++) {
-      final templatePath = templatePaths[i];
-      if (templatePath is! YamlMap) {
-        throw 'mustache_template_paths[$i] 格式不正确!';
+    final files =
+        Directory(rootPath).listSync(recursive: true).whereType<File>();
+    for (final file in files) {
+      if (extension(file.path) != '.mustache') {
+        continue;
       }
-      final source = templatePath['source'];
-      final to = templatePath['to'];
-      if (source is! String || to is! String) {
-        throw 'source 或者 to 格式不正确!';
+      final souceText = await file.readAsString();
+      await file.delete();
+      final createFile = File(withoutExtension(file.path));
+      if (!createFile.existsSync()) {
+        createFile.createSync(recursive: true);
       }
-      final sourceFile = _templateFile(source, rootPath);
-      final toFile = _templateFile(to, rootPath, mustacheData: json);
-      final souceText = await sourceFile.readAsString();
-      await sourceFile.delete();
-      await toFile.writeAsString(render(souceText, json));
+      await createFile.writeAsString(render(souceText, json));
     }
     stdout.writeln('❇️ 生成完毕!');
   }

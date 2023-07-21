@@ -4,6 +4,7 @@ import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/base_command.dart';
 import 'package:dcm/src/generated_command.dart';
 import 'package:mustache_template/mustache_template.dart';
+import 'package:path/path.dart';
 import 'package:process_run/shell.dart';
 
 class CreateCommand extends BaseCommand {
@@ -41,11 +42,12 @@ class CreateCommand extends BaseCommand {
     if (ref != null) {
       shellCommand += " -b $ref";
     }
+    print(shellCommand);
     await Shell(workingDirectory: workingDirectory).run(shellCommand);
 
     await GeneratedCommand().generated(
       json: mustacheData,
-      rootPath: workingDirectory + Platform.pathSeparator + name,
+      rootPath: join(workingDirectory, name),
     );
   }
 
