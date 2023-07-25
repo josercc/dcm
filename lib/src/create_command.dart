@@ -32,6 +32,15 @@ class CreateCommand extends BaseCommand {
     final url = JSON(argResults?['url']).stringValue;
     final ref = JSON(argResults?['ref']).string;
     final description = JSON(argResults?['description']).string;
+    await createProject(name, url, ref, description);
+  }
+
+  Future<void> createProject(
+    String name,
+    String url, [
+    String? ref,
+    String? description,
+  ]) async {
     final mustacheData = {
       'name': name,
       'description': description ?? '$name description',
