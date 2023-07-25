@@ -50,6 +50,10 @@ class CliVersionManager {
     if (_installed.isNotEmpty) {
       return;
     }
+    final file = File(_installPath);
+    if (!await file.exists()) {
+      return;
+    }
     final jsonText = await File(_installPath).readAsString();
     final jsonValue = json.decode(jsonText);
     _installed
