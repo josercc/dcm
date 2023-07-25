@@ -1,6 +1,7 @@
 import 'package:dcm/src/create_command.dart';
 import 'package:dcm/src/list_command.dart';
 import 'package:dcm/src/local_install_command.dart';
+import 'package:dcm/src/uninstall_command.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -31,6 +32,17 @@ void main() {
     'test list json',
     () async {
       await ListCommand().showListData(true);
+    },
+    timeout: Timeout.none,
+  );
+
+  test(
+    'uninstall command',
+    () async {
+      await UninstallCommand().uninstall(
+        'fix_analyzer_runtime',
+        '__local__',
+      );
     },
     timeout: Timeout.none,
   );

@@ -22,7 +22,8 @@ class CliVersionManager {
   Future<Cli?> queryFromName(String name, String ref) async {
     await _loadInstalled();
     return JSON(_installed
-            .where((element) => element.name == name && element.ref == ref))[0]
+            .where((element) => element.name == name && element.ref == ref)
+            .toList())[0]
         .rawValue;
   }
 
@@ -39,7 +40,7 @@ class CliVersionManager {
   Future<void> deleteCli(Cli cli) async {
     final index = _installed.indexWhere(
         (element) => element.url == cli.url && element.ref == cli.ref);
-    if (index != 0) {
+    if (index != -1) {
       _installed.removeAt(index);
     }
     await _saveInstalled();

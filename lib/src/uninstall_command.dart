@@ -30,7 +30,10 @@ class UninstallCommand extends BaseCommand {
     }
     final commandName = nameArguments[0];
     final ref = nameArguments[1];
+    await uninstall(commandName, ref);
+  }
 
+  Future<void> uninstall(String commandName, String ref) async {
     final exeFile = File(
       binPath +
           Platform.pathSeparator +
@@ -48,7 +51,7 @@ class UninstallCommand extends BaseCommand {
 
     final cli = await CliVersionManager().queryFromName(commandName, ref);
     if (cli == null) return;
-    CliVersionManager().deleteCli(cli);
+    await CliVersionManager().deleteCli(cli);
     stdout.writeln("$name 卸载成功!");
   }
 }

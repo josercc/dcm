@@ -16,6 +16,9 @@ class Cli {
   /// 安装时间
   late int date;
 
+  /// 安装在本地的路径
+  late String installPath;
+
   Cli();
 
   Cli.fromJson(Map<String, dynamic> map) {
@@ -25,6 +28,7 @@ class Cli {
     name = json['name'].stringValue;
     isLocal = json['isLocal'].boolValue;
     date = json['date'].intValue;
+    installPath = json['installPath'].stringValue;
   }
 
   Map<String, dynamic> toJson() {
@@ -34,6 +38,7 @@ class Cli {
       'name': name,
       'isLocal': isLocal,
       'date': date,
+      'installPath': installPath
     };
   }
 }
