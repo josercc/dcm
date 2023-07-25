@@ -46,7 +46,7 @@ class CliVersionManager {
   }
 
   Future<void> _loadInstalled() async {
-    if (_installPath.isNotEmpty) {
+    if (_installed.isNotEmpty) {
       return;
     }
     final jsonText = await File(_installPath).readAsString();
@@ -56,7 +56,7 @@ class CliVersionManager {
   }
 
   Future<void> _saveInstalled() async {
-    final jsonValue = _installed.map((e) => e.toJson());
+    final jsonValue = _installed.map((e) => e.toJson()).toList();
     final jsonText = const JsonEncoder.withIndent(" ").convert(jsonValue);
     final file = File(_installPath);
     if (!await file.exists()) {

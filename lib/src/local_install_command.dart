@@ -22,6 +22,10 @@ class LocalInstallCommand extends BaseCommand with InstallMixin {
 
     final path = argResults?['path'] as String;
     final force = argResults?['force'] as bool? ?? false;
+    await localInstall(path, force);
+  }
+
+  Future<void> localInstall(String path, bool force) async {
     if (!isLocalPath(path)) {
       stderr.writeln('$path 不是一个本地路径!');
     }

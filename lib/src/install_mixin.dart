@@ -134,7 +134,7 @@ mixin InstallMixin on BaseCommand {
     await exeFile.copy(exeNewPath);
 
     if (cli == null) {
-      CliVersionManager().addCli(
+      await CliVersionManager().addCli(
         Cli()
           ..name = pubName
           ..url = path

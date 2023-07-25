@@ -28,7 +28,7 @@ String packageName(Uri uri) {
 Future<void> createDirectory(String path) async {
   final directory = Directory(path);
   if (!await directory.exists()) {
-    await directory.create();
+    await directory.create(recursive: true);
   }
 }
 
