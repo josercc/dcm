@@ -1,5 +1,5 @@
 name: dcm
-version: 1.4.0
+version: 1.5.0
 homepage: https://github.com/josercc/dcm
 publish_to: https://pub.dartlang.org
 description: Dart CLI manager
@@ -20,3 +20,6 @@ dev_dependencies:
   test: ^1.16.0
 executables:
   dcm:
+
+assets:
+  - assets/

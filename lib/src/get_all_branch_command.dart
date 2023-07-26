@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/base_command.dart';
 import 'package:dcm/src/cli_version_manager.dart';
-import 'package:dcm/src/shell/get_all_branch.dart';
 import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 
