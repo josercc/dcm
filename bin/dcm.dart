@@ -4,6 +4,8 @@ import 'package:args/command_runner.dart';
 import 'package:dcm/src/cli_version_manager.dart';
 import 'package:dcm/src/create_command.dart';
 import 'package:dcm/src/generated_command.dart';
+import 'package:dcm/src/get_all_branch_command.dart';
+import 'package:dcm/src/get_all_tag_command.dart';
 import 'package:dcm/src/install_command.dart';
 import 'package:dcm/src/list_command.dart';
 import 'package:dcm/src/local_install_command.dart';
@@ -20,7 +22,9 @@ Future<void> main(List<String> args) async {
     ..addCommand(CreateCommand())
     ..addCommand(GeneratedCommand())
     ..addCommand(LocalInstallCommand())
-    ..addCommand(PrintDBPathCommand());
+    ..addCommand(PrintDBPathCommand())
+    ..addCommand(GetAllBranchCommand())
+    ..addCommand(GetAllTagCommand());
 
   var sourceArgs = args;
   if (!sourceArgs.contains('-c') &&

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:dcm/src/base_command.dart';
 import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/cli_version_manager.dart';
+import 'package:path/path.dart';
+import 'package:process_run/shell.dart';
 
 class UninstallCommand extends BaseCommand {
   @override
@@ -34,23 +36,21 @@ class UninstallCommand extends BaseCommand {
   }
 
   Future<void> uninstall(String commandName, String ref) async {
-    final exeFile = File(
-      binPath +
-          Platform.pathSeparator +
-          commandName +
-          Platform.pathSeparator +
-          ref +
-          Platform.pathSeparator +
-          commandName +
-          ".exe",
-    );
-
-    if (await exeFile.exists()) {
-      await exeFile.delete();
+    final cli = await CliVersionManager().queryFromName(commandName, ref);
+    if (cli == null) {
+      throw "$commandName@$ref 不存在";
     }
 
-    final cli = await CliVersionManager().queryFromName(commandName, ref);
-    if (cli == null) return;
+    final binDir = join(platformEnvironment['HOME']!, '.dcm', 'bin');
+    final pluginBinDir = join(binDir, commandName, ref);
+    if (await Directory(pluginBinDir).exists()) {
+      await Directory(pluginBinDir).delete(recursive: true);
+    }
+
+    if (await Directory(cli.installPath).exists()) {
+      await Directory(cli.installPath).delete(recursive: true);
+    }
+
     await CliVersionManager().deleteCli(cli);
     stdout.writeln("$name 卸载成功!");
   }

@@ -9,3 +9,5 @@ bin/dcm.exe
 bin/default.realm
 bin/default.realm.lock
 binary
+.DS_Store
+lib/.DS_Store
