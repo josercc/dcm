@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/base_command.dart';
 import 'package:dcm/src/dcm.dart';
 import 'package:dcm/src/install_mixin.dart';
+import 'package:process_run/shell.dart';
 
 class LocalInstallCommand extends BaseCommand with InstallMixin {
   @override
@@ -29,6 +31,20 @@ class LocalInstallCommand extends BaseCommand with InstallMixin {
     if (!isLocalPath(path)) {
       stderr.writeln('$path 不是一个本地路径!');
     }
-    await install(path, '__local__', foce: force);
+    final git = await which('git');
+    final branch = await Shell(workingDirectory: path)
+        .run('''$git branch --show-current''').then((value) {
+      return JSON(value)[0]
+          .unwrap<ProcessResult>()
+          .map((e) => e.stdout?.toString())
+          .value;
+    });
+    await install(
+      path,
+      Unwrap(branch)
+          .map((e) => e.replaceAll('\n', ''))
+          .defaultValue('__local__'),
+      foce: force,
+    );
   }
 }
