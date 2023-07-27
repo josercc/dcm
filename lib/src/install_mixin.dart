@@ -94,44 +94,7 @@ mixin InstallMixin on BaseCommand {
     }
 
     /// 编译 exe 执行文件
-    final dart = await which('dart');
-    final fvm = await which('fvm');
-    if (!await File(p.join(refPath, '.fvm', 'fvm_config.json')).exists()) {
-      await Shell(workingDirectory: refPath).run(
-        '''
-  $fvm dart pub get
-  $fvm dart compile exe ${mainFile.path}
-''',
-      );
-    } else {
-      await Shell(workingDirectory: refPath).run(
-        '''
-  $dart pub get
-  $dart compile exe ${mainFile.path}
-''',
-      );
-    }
-
-    final exeFile = File(binPath + Platform.pathSeparator + "$pubName.exe");
-    if (!await exeFile.exists()) {
-      throw "${exeFile.path} 不存在";
-    }
-
-    final copyToDirectory = Directory(
-      this.binPath +
-          Platform.pathSeparator +
-          pubName +
-          Platform.pathSeparator +
-          ref,
-    );
-
-    if (!await copyToDirectory.exists()) {
-      await copyToDirectory.create(recursive: true);
-    }
-
-    final exeNewPath =
-        copyToDirectory.path + Platform.pathSeparator + "$pubName.exe";
-    await exeFile.copy(exeNewPath);
+    await buildExe(refDirectory.path, name, ref);
 
     if (cli == null) {
       await CliVersionManager().addCli(
@@ -146,5 +109,53 @@ mixin InstallMixin on BaseCommand {
     }
 
     stdout.writeln("$pubName@$ref 安装成功");
+  }
+
+  Future<void> buildExe(
+    String installPath,
+    String name,
+    String ref,
+  ) async {
+    final binPath = p.join(installPath, 'bin', '$name.dart');
+
+    /// 编译 exe 执行文件
+    final dart = await which('dart');
+    final fvm = await which('fvm');
+    if (!await File(p.join(installPath, '.fvm', 'fvm_config.json')).exists()) {
+      await Shell(workingDirectory: installPath).run(
+        '''
+  $fvm dart pub get
+  $fvm dart compile exe $binPath
+''',
+      );
+    } else {
+      await Shell(workingDirectory: installPath).run(
+        '''
+  $dart pub get
+  $dart compile exe $binPath
+''',
+      );
+    }
+
+    final exeFile = File(binPath + Platform.pathSeparator + "$name.exe");
+    if (!await exeFile.exists()) {
+      throw "${exeFile.path} 不存在";
+    }
+
+    final copyToDirectory = Directory(
+      this.binPath +
+          Platform.pathSeparator +
+          name +
+          Platform.pathSeparator +
+          ref,
+    );
+
+    if (!await copyToDirectory.exists()) {
+      await copyToDirectory.create(recursive: true);
+    }
+
+    final exeNewPath =
+        copyToDirectory.path + Platform.pathSeparator + "$name.exe";
+    await exeFile.copy(exeNewPath);
   }
 }

@@ -10,6 +10,7 @@ import 'package:dcm/src/install_command.dart';
 import 'package:dcm/src/list_command.dart';
 import 'package:dcm/src/local_install_command.dart';
 import 'package:dcm/src/print_db_path_command.dart';
+import 'package:dcm/src/rebuild_command.dart';
 import 'package:dcm/src/run_command.dart';
 import 'package:dcm/src/uninstall_command.dart';
 
@@ -24,7 +25,8 @@ Future<void> main(List<String> args) async {
     ..addCommand(LocalInstallCommand())
     ..addCommand(PrintDBPathCommand())
     ..addCommand(GetAllBranchCommand())
-    ..addCommand(GetAllTagCommand());
+    ..addCommand(GetAllTagCommand())
+    ..addCommand(ReBuildCommand());
 
   var sourceArgs = args;
   if (!sourceArgs.contains('-c') &&
