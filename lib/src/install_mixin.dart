@@ -137,25 +137,18 @@ mixin InstallMixin on BaseCommand {
       );
     }
 
-    final exeFile = File(binPath + Platform.pathSeparator + "$name.exe");
+    final exeFile = File(p.join(installPath, 'bin', '$name.exe'));
     if (!await exeFile.exists()) {
       throw "${exeFile.path} 不存在";
     }
 
-    final copyToDirectory = Directory(
-      this.binPath +
-          Platform.pathSeparator +
-          name +
-          Platform.pathSeparator +
-          ref,
-    );
+    final copyToDirectory = Directory(p.join(this.binPath, name, ref));
 
     if (!await copyToDirectory.exists()) {
       await copyToDirectory.create(recursive: true);
     }
 
-    final exeNewPath =
-        copyToDirectory.path + Platform.pathSeparator + "$name.exe";
+    final exeNewPath = p.join(copyToDirectory.path, "$name.exe");
     await exeFile.copy(exeNewPath);
   }
 }
