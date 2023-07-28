@@ -35,7 +35,9 @@ abstract class BaseCommand extends Command {
   String get packagesPath => dcmPath + Platform.pathSeparator + "packages";
 
   String packageName(Uri uri) {
-    return [uri.host, ...uri.path.split("/")].join('_').replaceAll(".git", "");
+    return [uri.host, ...uri.path.split(Platform.pathSeparator)]
+        .join('_')
+        .replaceAll(".git", "");
   }
 
   Future<void> createDirectory(String path) async {
