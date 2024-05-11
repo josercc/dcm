@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dcm/src/dart_cli_installed_model.dart';
 import 'package:path/path.dart' as p;
+import 'package:path/path.dart';
 import 'package:process_run/shell_run.dart';
 
 String get homePath {
@@ -63,3 +64,6 @@ String get configPath => p.join(dcmPath, "config.json");
 bool isLocalPath(String url) => !url.startsWith('http');
 
 String get realmPath => p.join(dcmPath, 'dcm.realm');
+
+String exePath(String name, String ref) =>
+    join(platformEnvironment["HOME"]!, '.dcm', 'bin', name, ref, "$name.exe");
