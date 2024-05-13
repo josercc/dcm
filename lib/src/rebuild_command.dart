@@ -22,7 +22,8 @@ class ReBuildCommand extends BaseCommand with InstallMixin {
     await super.run();
     final name = JSON(argResults?['name']).stringValue;
     final ref = JSON(argResults?['ref']).stringValue;
-    final cli = await CliVersionManager().queryFromName(name, ref);
+    final cli =
+        await CliVersionManager(prefix: prefix).queryFromName(name, ref);
     if (cli == null) {
       throw '命令 $name@$ref 不存在!';
     }

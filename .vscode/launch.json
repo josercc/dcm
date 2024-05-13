@@ -44,8 +44,23 @@
             "type": "dart",
             "program": "bin/dcm.dart",
             "args": [
-                "uninstall","-n","realm_generate@main"
+                "uninstall",
+                "-n",
+                "realm_generate@main"
             ]
-        }
+        },
+        {
+            "name": "local install command",
+            "request": "launch",
+            "type": "dart",
+            "program": "bin/dcm.dart",
+            "args": [
+                "local",
+                "-p",
+                "./",
+                "--prefix",
+                "test"
+            ]
+        },
     ]
 }

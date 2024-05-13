@@ -23,7 +23,8 @@ class GetAllTagCommand extends BaseCommand {
     final ref = JSON(argResults?['ref']).stringValue;
 
     /// 查询命令
-    final cli = await CliVersionManager().queryFromName(name, ref);
+    final cli =
+        await CliVersionManager(prefix: prefix).queryFromName(name, ref);
     if (cli == null) {
       throw '命令 $name@$ref 不存在!';
     }

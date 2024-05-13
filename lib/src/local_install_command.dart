@@ -28,6 +28,10 @@ class LocalInstallCommand extends BaseCommand with InstallMixin {
   }
 
   Future<void> localInstall(String path, bool force) async {
+    if (path.startsWith('./')) {
+      path = path.replaceFirst('./', '');
+    }
+    path = Uri.file(Directory.current.path).resolve(path).toFilePath();
     if (!isLocalPath(path)) {
       stderr.writeln('$path 不是一个本地路径!');
     }

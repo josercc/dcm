@@ -8,7 +8,6 @@ import 'package:dcm/src/get_all_tag_command.dart';
 import 'package:dcm/src/install_command.dart';
 import 'package:dcm/src/list_command.dart';
 import 'package:dcm/src/local_install_command.dart';
-import 'package:dcm/src/print_db_path_command.dart';
 import 'package:dcm/src/rebuild_command.dart';
 import 'package:dcm/src/run_command.dart';
 import 'package:dcm/src/uninstall_command.dart';
@@ -22,11 +21,11 @@ Future<void> main(List<String> args) async {
     ..addCommand(CreateCommand())
     ..addCommand(GeneratedCommand())
     ..addCommand(LocalInstallCommand())
-    ..addCommand(PrintDBPathCommand())
+    // ..addCommand(PrintDBPathCommand())
     ..addCommand(GetAllBranchCommand())
     ..addCommand(GetAllTagCommand())
     ..addCommand(ReBuildCommand());
-
+  runner.argParser.addOption('prefix', help: '保存路径的前缀');
   var sourceArgs = args;
   if (!sourceArgs.contains('-c') &&
       !sourceArgs.contains('--command') &&
@@ -38,6 +37,7 @@ Future<void> main(List<String> args) async {
       sourceArgs.addAll(['-c', subCommond]);
     }
   }
+
   try {
     await runner.run(sourceArgs);
     exit(0);

@@ -73,7 +73,8 @@ mixin InstallMixin on BaseCommand {
     /// 读取 Pub 的名称
     final pubName = Pubspec.parse(pubspecContent).name;
 
-    final cli = await CliVersionManager().queryFromName(pubName, ref);
+    final cli =
+        await CliVersionManager(prefix: prefix).queryFromName(pubName, ref);
 
     /// 判断安装的命令是否已经存在
     final cliExists = cli != null;
@@ -94,10 +95,10 @@ mixin InstallMixin on BaseCommand {
     }
 
     /// 编译 exe 执行文件
-    await buildExe(refDirectory.path, name, ref);
+    await buildExe(refDirectory.path, pubName, ref);
 
     if (cli == null) {
-      await CliVersionManager().addCli(
+      await CliVersionManager(prefix: prefix).addCli(
         Cli()
           ..name = pubName
           ..url = path

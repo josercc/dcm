@@ -36,7 +36,8 @@ class UninstallCommand extends BaseCommand {
   }
 
   Future<void> uninstall(String commandName, String ref) async {
-    final cli = await CliVersionManager().queryFromName(commandName, ref);
+    final cli =
+        await CliVersionManager(prefix: prefix).queryFromName(commandName, ref);
     if (cli == null) {
       throw "$commandName@$ref 不存在";
     }
@@ -51,7 +52,7 @@ class UninstallCommand extends BaseCommand {
       await Directory(cli.installPath).delete(recursive: true);
     }
 
-    await CliVersionManager().deleteCli(cli);
+    await CliVersionManager(prefix: prefix).deleteCli(cli);
     stdout.writeln("$name 卸载成功!");
   }
 }
