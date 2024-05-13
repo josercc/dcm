@@ -1,3 +1,5 @@
+import 'package:test/test.dart';
+
 void main() {
-  print('hello world');
+  test('test', () => expect(''.length, 0));
 }
