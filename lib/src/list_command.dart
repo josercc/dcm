@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/base_command.dart';
-import 'package:dcm/src/cli.dart';
 import 'package:dcm/src/cli_version_manager.dart';
 import 'package:mustache_template/mustache.dart';
 

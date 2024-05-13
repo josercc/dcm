@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
-import 'package:dcm/src/cli_version_manager.dart';
 import 'package:dcm/src/create_command.dart';
 import 'package:dcm/src/generated_command.dart';
 import 'package:dcm/src/get_all_branch_command.dart';

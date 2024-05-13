@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dcm/src/base_command.dart';
 import 'package:mustache_template/mustache.dart';
 import 'package:path/path.dart';
-import 'package:yaml/yaml.dart';
 
 class GeneratedCommand extends BaseCommand {
   @override
