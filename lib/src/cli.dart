@@ -1,6 +1,8 @@
-import 'package:darty_json_safe/darty_json_safe.dart';
+import 'package:realm_dart/realm.dart';
+part 'cli.realm.dart';
 
-class Cli {
+@RealmModel()
+class _Cli {
   /// 安装命令的地址
   late String url;
 
@@ -11,34 +13,11 @@ class Cli {
   late String name;
 
   /// 是否本地路径安装
-  late bool isLocal = false;
+  bool isLocal = false;
 
   /// 安装时间
   late int date;
 
   /// 安装在本地的路径
   late String installPath;
-
-  Cli();
-
-  Cli.fromJson(Map<String, dynamic> map) {
-    final json = JSON(map);
-    url = json['url'].stringValue;
-    ref = json['ref'].stringValue;
-    name = json['name'].stringValue;
-    isLocal = json['isLocal'].boolValue;
-    date = json['date'].intValue;
-    installPath = json['installPath'].stringValue;
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'url': url,
-      'ref': ref,
-      'name': name,
-      'isLocal': isLocal,
-      'date': date,
-      'installPath': installPath
-    };
-  }
 }

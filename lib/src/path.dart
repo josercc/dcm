@@ -8,31 +8,18 @@ class Path {
 
   String get homePath => Platform.environment["HOME"]!;
   String get dcmPath => join(homePath, ".dcm");
-  String get binPath {
+  String get rootPath {
     if (prefix == null) {
-      return join(dcmPath, "bin");
+      return dcmPath;
     } else {
-      return join(dcmPath, prefix, "bin");
+      return join(dcmPath, prefix);
     }
   }
 
-  String get packagesPath {
-    if (prefix == null) {
-      return join(dcmPath, "packages");
-    } else {
-      return join(dcmPath, prefix, "packages");
-    }
-  }
-
-  String get configPath {
-    if (prefix == null) {
-      return join(dcmPath, "plugin.json");
-    } else {
-      return join(dcmPath, prefix, "plugin.json");
-    }
-  }
-
-  // String get realmPath => join(dcmPath, prefix, 'dcm.realm');
+  String get binPath => join(rootPath, 'bin');
+  String get packagesPath => join(rootPath, 'packages');
+  String get realmPath => join(rootPath, 'dcm.realm');
+  String get packagePath => join(rootPath, 'plugin.json');
   String exePath(String name, String ref) =>
       join(binPath, name, ref, "$name.exe");
 }

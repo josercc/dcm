@@ -27,8 +27,16 @@ class ListCommand extends BaseCommand {
   Future<void> showListData(bool json) async {
     final allClis = await CliVersionManager(prefix: prefix).allInstalled();
     if (json) {
-      final jsonText = const JsonEncoder.withIndent(" ")
-          .convert(allClis.map((e) => e.toJson()).toList());
+      final jsonText = const JsonEncoder.withIndent(" ").convert(allClis
+          .map((e) => {
+                'name': e.name,
+                'url': e.url,
+                'ref': e.ref,
+                'isLocal': e.isLocal,
+                'date': e.date,
+                'installPath': e.installPath,
+              })
+          .toList());
       stdout.writeln(jsonText);
       return;
     }

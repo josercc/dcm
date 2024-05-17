@@ -1,8 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/dcm.dart';
-import 'package:dcm/src/path.dart';
 
 abstract class BaseCommand extends Command {
   String? prefix;
@@ -19,6 +20,24 @@ abstract class BaseCommand extends Command {
 
     /// 创建 $HOME/.dcm/packages
     await createDirectory(path.packagesPath);
+
+    final cacheFile = File(Path(prefix).packagePath);
+    if (await cacheFile.exists()) {
+      final content = await cacheFile.readAsString();
+      final clis = JSON(json.decode(content))
+          .listValue
+          .map((e) => Cli(
+                JSON(e)['url'].stringValue,
+                JSON(e)['ref'].stringValue,
+                JSON(e)['name'].stringValue,
+                JSON(e)['isLocal'].intValue,
+                JSON(e)['installPath'].stringValue,
+                isLocal: JSON(e)['isLocal'].boolValue,
+              ))
+          .toList();
+      await CliVersionManager(prefix: prefix).addClis(clis);
+      await cacheFile.delete(recursive: true);
+    }
   }
 
   String get packagesPath => path.packagesPath;

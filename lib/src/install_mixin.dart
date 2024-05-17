@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:darty_json_safe/darty_json_safe.dart';
 import 'package:dcm/src/base_command.dart';
-import 'package:dcm/src/cli.dart';
 import 'package:dcm/src/cli_version_manager.dart';
 import 'package:dcm/src/dcm.dart';
 import 'package:io/io.dart';
@@ -98,15 +97,15 @@ mixin InstallMixin on BaseCommand {
     await buildExe(refDirectory.path, pubName, ref);
 
     if (cli == null) {
-      await CliVersionManager(prefix: prefix).addCli(
-        Cli()
-          ..name = pubName
-          ..url = path
-          ..ref = ref
-          ..isLocal = isLocalPath(path)
-          ..date = DateTime.now().millisecondsSinceEpoch
-          ..installPath = refDirectory.path,
-      );
+      // await CliVersionManager(prefix: prefix).addCli(
+      //   Cli()
+      //     ..name = pubName
+      //     ..url = path
+      //     ..ref = ref
+      //     ..isLocal = isLocalPath(path)
+      //     ..date = DateTime.now().millisecondsSinceEpoch
+      //     ..installPath = refDirectory.path,
+      // );
     }
 
     stdout.writeln("$pubName@$ref 安装成功");
