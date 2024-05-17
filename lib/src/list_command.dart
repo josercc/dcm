@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:darty_json_safe/darty_json_safe.dart';
+import 'package:dcm/dcm.dart';
 import 'package:dcm/src/base_command.dart';
-import 'package:dcm/src/cli_version_manager.dart';
 import 'package:mustache_template/mustache.dart';
 
 class ListCommand extends BaseCommand {
@@ -35,6 +35,7 @@ class ListCommand extends BaseCommand {
                 'isLocal': e.isLocal,
                 'date': e.date,
                 'installPath': e.installPath,
+                'exe': Path(prefix).exePath(e.name, e.ref),
               })
           .toList());
       stdout.writeln(jsonText);
@@ -52,6 +53,7 @@ class ListCommand extends BaseCommand {
             'refs': clis.where((element) => element.url == e).map((e) {
               return {
                 'ref': e.ref,
+                'exe': Path(prefix).exePath(e.name, e.ref),
               };
             }).toList()
           };
@@ -66,8 +68,8 @@ class ListCommand extends BaseCommand {
   - {{{url}}}
     {{#refs}}
       @{{{ref}}}
+      {{{exe}}}
     {{/refs}}
-    
   {{/urls}}
 
 {{/datas}}
