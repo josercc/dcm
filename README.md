@@ -2,7 +2,7 @@
 ## 安装
 
 ```bash
-dart pub global activate --source git https://github.com/josercc/dcm.git
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/josercc/dcm/main/install.sh)"
 ```
 
 ## 怎么使用
